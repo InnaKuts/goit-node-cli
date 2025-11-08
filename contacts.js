@@ -38,6 +38,10 @@ async function removeContact(contactId) {
 
 async function addContact(name, email, phone) {
   const contacts = await listContacts();
+  const existingContact = contacts.find((contact) => contact.email === email);
+  if (existingContact) {
+    throw new Error(`Contact with email '${email}' already exists`);
+  }
   const newContact = { id: nanoid(21), name, email, phone };
   contacts.push(newContact);
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));

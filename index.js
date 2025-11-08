@@ -49,4 +49,14 @@ async function invokeAction({ action, id, name, email, phone }) {
   }
 }
 
-invokeAction(options);
+try {
+  await invokeAction(options);
+} catch (error) {
+  if (error.code === "ENOENT") {
+    console.error(
+      "DB file not found. Try to seed the contacts first: `node index.js -a seed`"
+    );
+  } else {
+    console.error(error.message);
+  }
+}
